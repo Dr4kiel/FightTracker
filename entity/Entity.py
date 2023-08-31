@@ -2,8 +2,10 @@
 Fichier contenant les classes des personnages et des monstres
 '''
 
+from EntityView import EntityView
 
-class Entite:
+
+class Entite():
 
     def __init__(self, name, initiative, hp, ac, speed, controller, **kwargs):
         '''
@@ -69,6 +71,18 @@ class Entite:
         Méthode permettant de comparer deux entités
         '''
         return self.initiative != other.initiative
+
+    def set_view(self, view):
+        '''
+        Méthode permettant de définir la vue de l'entité
+        '''
+        self.view = view
+
+    def get_view(self):
+        '''
+        Méthode permettant de récupérer la vue de l'entité
+        '''
+        return self.view
 
 
 class Personnage(Entite):

@@ -9,7 +9,7 @@ from PIL import Image
 
 from entity.EntityController import EntityController
 from entity.Entity import Entite
-from component.EntityView import EntityView
+from entity.EntityView import EntityView
 from component.fancyElement import FancySpinBox
 
 DEFAULT_BACKGROUND = '#41B77F'
@@ -109,18 +109,20 @@ class PageConfiguration(Page):
 
         # Création du frame des boutons de la liste des entités
         entity_list_button_frame = ctk.CTkFrame(
-            entity_list_frame)
+            entity_list_frame, bg_color="transparent", fg_color="transparent")
         entity_list_button_frame.pack(
-            expand=YES, side=RIGHT, padx=10, pady=10, fill=X)
-
+            expand=YES, padx=10, pady=10, fill=X)
+        ctk.CTkLabel(entity_list_button_frame, text="").pack(
+            expand=YES, side=LEFT)
         # Création du bouton d'ajout d'entité
         add_entity_button = ctk.CTkButton(entity_list_button_frame, text="", image=ctk.CTkImage(light_image=Image.open("./assets/add_ico.png")), font=(
             "Courrier", 25), command=self.add_entity_window, fg_color="green", width=20)
-        add_entity_button.pack(expand=YES, side=RIGHT,
+        add_entity_button.pack(side=RIGHT,
                                padx=10, pady=10)
 
         # Création du groupe de boutons de navigation
-        navigation_frame = ctk.CTkFrame(frame)
+        navigation_frame = ctk.CTkFrame(
+            frame, bg_color="transparent", fg_color="transparent")
         navigation_frame.pack(expand=YES)
 
         # Création du bouton de lancement
@@ -168,7 +170,7 @@ class PageConfiguration(Page):
 
         # Création du frame principal
         frame = ctk.CTkFrame(window)
-        frame.pack(expand=YES)
+        frame.pack(expand=YES, fill=BOTH)
 
         # Création du frame de l'entité
         entity_frame = ctk.CTkFrame(frame)
@@ -236,7 +238,7 @@ class PageConfiguration(Page):
 
         # Création du frame de la vitesse de l'entité
         entity_speed_frame = ctk.CTkFrame(entity_frame)
-        entity_speed_frame.pack(expand=YES, fill=X)
+        entity_speed_frame.pack(expand=YES, fill=BOTH)
 
         # Création du label de la vitesse de l'entité
         entity_speed_label = ctk.CTkLabel(entity_speed_frame, text="Vitesse", font=(
@@ -250,8 +252,9 @@ class PageConfiguration(Page):
         entity_speed_entry.pack(side=RIGHT)
 
         # Création du frame des boutons
-        button_frame = ctk.CTkFrame(frame)
-        button_frame.pack(expand=YES, fill=X)
+        button_frame = ctk.CTkFrame(
+            frame, bg_color="transparent", fg_color="transparent")
+        button_frame.pack(expand=YES, fill=X, side=BOTTOM)
 
         # Création du bouton de validation
         validate_button = ctk.CTkButton(button_frame, text="Valider", font=(
@@ -278,7 +281,8 @@ class PageConfiguration(Page):
 
         # création d'un groupe d'entité si aucun n'existe et création d'un groupe toutes les 6 entités
         if len(self.entity_controller.entities) % 6 == 1 or last_group == None:
-            last_group = ctk.CTkFrame(self.entity_list)
+            last_group = ctk.CTkFrame(
+                self.entity_list, bg_color="transparent", fg_color="transparent")
             last_group.pack(expand=YES, side=LEFT, padx=10, pady=10)
 
         frame_elem = ctk.CTkFrame(last_group)
@@ -361,11 +365,28 @@ class PageCombat(Page):
         for entity in self.entity_controller.entities:
             entity_view = EntityView(
                 self.entity_frame, self.controller)
+
+            entity.set_view(entity_view)
+
             entity_view.pack(expand=YES, side=LEFT, padx=10, pady=10)
             entity_view.show(entity)
 
         # Affichage des entités
         self.entity_frame.pack(expand=YES)
+
+        def update():
+            '''
+            Méthode permettant de mettre à jour l'affichage des entités
+            '''
+            # Tri des entités
+            self.entity_controller.sort()
+
+            # Mise à jour des entités
+            for entity in self.entity_controller.entities:
+                entity.view.show(entity)
+
+            # Mise à jour de l'affichage
+            self.entity_frame.update()
 
 
 class Controller:
