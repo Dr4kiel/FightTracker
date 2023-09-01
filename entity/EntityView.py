@@ -7,8 +7,6 @@ from tkinter import *
 import customtkinter as ctk
 from PIL import Image
 
-from entity.Entity import Entite
-
 
 class EntityView(ctk.CTkFrame):
 

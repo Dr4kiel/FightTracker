@@ -2,8 +2,6 @@
 Fichier contenant les classes des personnages et des monstres
 '''
 
-from EntityView import EntityView
-
 
 class Entite():
 

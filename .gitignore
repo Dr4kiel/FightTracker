@@ -2,3 +2,5 @@
 component/__pycache__/
 
 .vscode/
+
+entity/__pycache__/
